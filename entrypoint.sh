@@ -13,12 +13,12 @@ if [ -d "$TARGET_DIR" ]; then
     find "$TARGET_DIR" -mindepth 1 -maxdepth 3 -type f -delete 2>/dev/null || true
 fi
 
-echo "📂 Extraindo componentes do SmartClient HTML v10.2.0 na raiz do volume..."
-# O parâmetro --overwrite garante que os arquivos novos sobrescrevam qualquer arquivo ocupado de forma forçada
-tar -xzf /tmp/webapp.tar.gz --overwrite --strip-components=1 -C "$TARGET_DIR"
+echo "📂 Provisionando componentes do SmartClient HTML v10.2.0 na raiz do volume..."
+# Copia recursivamente os arquivos limpos que estão em /tmp/webapp para a pasta de destino
+cp -r /tmp/webapp/* "$TARGET_DIR/" 2>/dev/null || cp -r /tmp/webapp/. "$TARGET_DIR/"
 
 echo "✅ Interface WebApp v10.2.0 provisionada com sucesso no volume compartilhado!"
 echo "💤 Mantendo container em standby para governança do volume."
 
-# Mantém o container vivo sem consumir CPU
+# Mantém o container vivo sem consuming de CPU
 exec tail -f /dev/null

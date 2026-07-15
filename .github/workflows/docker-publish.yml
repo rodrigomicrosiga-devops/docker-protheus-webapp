@@ -18,9 +18,36 @@ jobs:
       - name: Checkout do Código
         uses: actions/checkout@v4
 
+      # 🚀 Resgata o pacote de forma dinâmica e tolera variações de caixa alta/baixa no nome
       - name: Resgatar WebApp Proprietário no Workspace
         run: |
-          cp ../../webapp.tar.gz . 2>/dev/null || cp "${{ github.workspace }}/../webapp.tar.gz" . 2>/dev/null || cp /media/rodrigo/dados/docker-protheus-webapp/webapp.tar.gz .
+          echo "🔍 Procurando arquivos da WebApp nos caminhos conhecidos..."
+          
+          # Ativa a opção nullglob para que os asteriscos não expandidos não quebrem o shell
+          shopt -s nullglob
+          
+          # Array com as tentativas de busca ordenadas por prioridade (Curinga case-insensitive para WEBAPP)
+          CANDIDATOS=(
+            ../../*[wW][eE][bB][aA][pP][pP]*.[tT][aA][rR].[gG][zZ]
+            "${{ github.workspace }}/../"*[wW][eE][bB][aA][pP][pP]*.[tT][aA][rR].[gG][zZ]
+            /media/rodrigo/dados/docker-protheus-webapp/*[wW][eE][bB][aA][pP][pP]*.[tT][aA][rR].[gG][zZ]
+          )
+          
+          COPIADO=false
+          for ARQUIVO in "${CANDIDATOS[@]}"; do
+            if [ -f "$ARQUIVO" ]; then
+              echo "✅ Arquivo encontrado em: $ARQUIVO"
+              cp "$ARQUIVO" .
+              COPIADO=true
+              break
+            fi
+          done
+          
+          if [ "$COPIADO" = false ]; then
+            echo "❌ ERRO: O arquivo compactado da WebApp não foi localizado em nenhum dos diretórios mapeados!"
+            echo "Certifique-se de que o arquivo (.TAR.GZ) está em /media/rodrigo/dados/docker-protheus-webapp/ ou no nível acima do projeto."
+            exit 1
+          fi
 
       - name: Log in to Docker Hub
         uses: docker/login-action@v3
