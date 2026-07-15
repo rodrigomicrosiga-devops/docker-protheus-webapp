@@ -26,3 +26,5 @@ echo "💤 Mantendo container em standby para governança do volume."
 
 # Mantém o container vivo sem consumo de CPU
 exec tail -f /dev/null
+
+# CI/CD Trigger Checksum: v1.0.1-rev1
