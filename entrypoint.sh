@@ -1,7 +1,7 @@
 #!/bin/sh
 set -e
 
-echo "📦 [WebApp Delivery] Inicializando provisionamento da interface v10.2.0..."
+echo "📦 [WebApp Delivery] Inicializando provisionamento da interface v10.2.1..."
 
 TARGET_DIR="/mnt/webapp_shared"
 
@@ -12,7 +12,7 @@ if [ -d "$TARGET_DIR" ]; then
     find "$TARGET_DIR" -mindepth 1 -maxdepth 1 -type f -delete 2>/dev/null || true
 fi
 
-echo "📂 Provisionando componentes do SmartClient HTML v10.2.0 na raiz do volume..."
+echo "📂 Provisionando componentes do SmartClient HTML v10.2.1 na raiz do volume..."
 
 # 🚀 CÓPIA CIRÚRGICA: Garante que apenas o arquivo webapp.so seja copiado para a raiz do volume compartilhado
 if [ -f "/tmp/webapp/webapp.so" ]; then
@@ -21,7 +21,7 @@ else
     echo "⚠️  Aviso: webapp.so não localizado em /tmp/webapp/"
 fi
 
-echo "✅ Interface WebApp v10.2.0 provisionada com sucesso no volume compartilhado!"
+echo "✅ Interface WebApp v10.2.1 provisionada com sucesso no volume compartilhado!"
 echo "💤 Mantendo container em standby para governança do volume."
 
 # Mantém o container vivo sem consumo de CPU

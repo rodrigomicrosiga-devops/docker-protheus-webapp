@@ -21,7 +21,7 @@ RUN find webapp/ -type f -name "*.so*" -exec strip --strip-unneeded {} + 2>/dev/
 # ==============================================================================
 FROM alpine:3.19 AS runner
 LABEL maintainer="Rodrigo dos Santos Brandão <rodrigomicrosiga>" \
-      version="10.2.0" \
+      version="10.2.1" \
       description="TOTVS Protheus SmartClient HTML WebApp Module - Delivery Container - Ultra Light"
 
 # Instala o tar para garantir a descompactação/manuseio de arquivos adicionais se necessário
