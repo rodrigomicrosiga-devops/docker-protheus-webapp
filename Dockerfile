@@ -27,15 +27,21 @@ LABEL maintainer="Rodrigo dos Santos Brandão <rodrigomicrosiga>" \
 # Instala o tar para garantir a descompactação/manuseio de arquivos adicionais se necessário
 RUN apk add --no-cache tar
 
+# Usuário não-root: este container só extrai um arquivo pro volume compartilhado
+# e fica em standby, não precisa de privilégio nenhum.
+RUN addgroup -S webapp && adduser -S -G webapp webapp
+
 WORKDIR /tmp
 
 # Cria o ponto de montagem do volume compartilhado
-RUN mkdir -p /mnt/webapp_shared
+RUN mkdir -p /mnt/webapp_shared && chown -R webapp:webapp /mnt/webapp_shared
 
 # Copia os arquivos limpos e otimizados pelo builder para o runner
-COPY --from=builder /tmp/build/webapp /tmp/webapp
+COPY --from=builder --chown=webapp:webapp /tmp/build/webapp /tmp/webapp
 
-COPY ./entrypoint.sh /usr/local/bin/entrypoint.sh
+COPY --chown=webapp:webapp ./entrypoint.sh /usr/local/bin/entrypoint.sh
 RUN chmod +x /usr/local/bin/entrypoint.sh
+
+USER webapp
 
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
