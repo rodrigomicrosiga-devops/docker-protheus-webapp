@@ -44,4 +44,9 @@ RUN chmod +x /usr/local/bin/entrypoint.sh
 
 USER webapp
 
+# Checa se o arquivo realmente foi provisionado no volume compartilhado --
+# o entrypoint não falha (só avisa) se o instalador não tiver o webapp.so.
+HEALTHCHECK --interval=30s --timeout=5s --start-period=15s --retries=3 \
+    CMD test -f /mnt/webapp_shared/webapp.so
+
 ENTRYPOINT ["/usr/local/bin/entrypoint.sh"]
