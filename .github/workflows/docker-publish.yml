@@ -65,3 +65,5 @@ jobs:
           file: ./Dockerfile
           push: true
           tags: rodrigomicrosiga/webapp-dev:10.2.1
+          labels: |
+            org.opencontainers.image.revision=${{ github.sha }}

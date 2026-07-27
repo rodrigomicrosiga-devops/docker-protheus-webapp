@@ -29,3 +29,11 @@ graph TD
 * **Atualização Zero-Downtime**: É possível atualizar a versão da interface de tela (ex: migrar de 10.2.0 para uma versão superior) substituindo apenas este container, sem a necessidade de reiniciar o AppServer principal ou derrubar conexões de usuários/Workers em background.
 
 * **Pipeline Isolado**: O build da interface roda de forma independente, gerando imagens leves baseadas em Alpine Linux.
+
+### 🏷️ Rastreabilidade de Build
+
+A tag da imagem publicada permanece fixa entre builds — só muda em uma nova release de versão. Para rastrear qual commit gerou um build específico sem depender da tag, o `pipeline` grava o label `org.opencontainers.image.revision` com o SHA do commit em toda imagem publicada:
+
+```bash
+docker inspect --format '{{ index .Config.Labels "org.opencontainers.image.revision" }}' rodrigomicrosiga/webapp-dev:10.2.1
+```
