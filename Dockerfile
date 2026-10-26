@@ -20,8 +20,12 @@ RUN find webapp/ -type f -name "*.so*" -exec strip --strip-unneeded {} + 2>/dev/
 # ESTÁGIO 2: Runner (Imagem Enxuta de Delivery)
 # ==============================================================================
 FROM alpine:3.19 AS runner
+# Versão do componente: vem do construtor (build-arg), sem valor padrão para não rotular a imagem errada.
+ARG WEBAPP_VERSION
+RUN test -n "${WEBAPP_VERSION}" || { echo "ERRO: passe --build-arg WEBAPP_VERSION=<versão>" >&2; exit 1; }
+ENV WEBAPP_VERSION=${WEBAPP_VERSION}
 LABEL maintainer="Rodrigo dos Santos Brandão <rodrigomicrosiga>" \
-      version="10.2.1" \
+      version="${WEBAPP_VERSION}" \
       description="TOTVS Protheus SmartClient HTML WebApp Module - Delivery Container - Ultra Light"
 
 # Instala o tar para garantir a descompactação/manuseio de arquivos adicionais se necessário
